@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
+<html lang="en">
+
+    {% csrf_token %}
+
+    <head>
+        <meta charset="UTF-8"?
+        <meta http-equiv="X-UA-Compatible">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>IMS</title>
+    </head>
+    
+    <style>
+        .dropdown{
+            height: 25px;
+            width: 60%;
+            font-size: medium;
+            border: double;
+        }
+
+        form{
+            width: 22%;
+            align-content: center;
+            color: white;
+            border:inset;
+            padding: 1%;
+        }
+
+        button{
+            color: white;
+            border: solid;
+            font-size: 80%;
+        }
+
+        a{
+            color: white;
+            border: solid;
+            font-size: 90%;
+            padding: 0.1%;
+        }
+
+        input{
+            width: 50%;
+        }
+        
+        .div_c{
+            overflow:scroll;
+            color: white;
+            border: solid;
+            position: absolute;
+            margin-left: 25%;
+            margin-top: -360px;
+            height: 80%;
+            font-size: 100%;
+            width: 65%;
+        }
+
+        table{
+            width: 100%;
+            font-size: 90%;
+        }
+
+        td{
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th{
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    </style>
+
+    <body style="background-color: #323232;">
+
+        <!--Application Title-->
+        <center>
+            <h2 id="header" style="color:white;">Inventory Management System</h2>
+        </center>
+        
+        <!--Top Form-->
+        <form style="margin-left: 25%; width:65%" method="POST" id="formIMSGet">
+            {% csrf_token %}
+            <label for="dropdown_up">Table:</label>
+            <select id="dropdown_up" name="dropdown_up" style="width: 20%;">
+                {% for col in cols %}
+                <option value='{{ col }}'>{{ col }}</option>
+                {% endfor %}
+            </select>
+
+            <button style="background-color: #87a4eb;">Show Inventory</button>
+            <a style="background-color: #2e8b86;" href="{% url 'download' %}">Download this month data</a>
+            {% if div_color == True %}
+                <span style="margin-left: 20%; background-color: #4F7942; padding: 0.5%;">Clear</span>
+            {% else %}
+                <span style="margin-left:15%; background-color: #8B0000; padding: 0.5%;">Need to order</span>
+            {% endif %}
+        </form>
+
+        <!--Left Form-->
+        <form method="POST" id="formIMSPost">
+            {% csrf_token %}
+            <center>
+                <label for="dropdown">Table:</label>
+                <br>
+                <select id="dropdown" name="dropdown" style="width: 60%;">
+                    {% for col in cols %}
+                    <option value='{{ col }}'>{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <hr>
+                <label for="quantityIn">Quantity In:</label>
+                <br>
+                <input type="number" id="quantityIn" name="quantityIn">
+                <br>
+                <label for="quantityOut">Quantity Out:</label>
+                <br>
+                <input type="number" id="quantityOut" name="quantityOut">
+                <br>
+                <label for="remarks">Remarks:</label>
+                <br>
+                <input type="text" id="remarks" name="remarks">
+                <br>
+                <button type="submit" style="background-color: #4F7942; margin-top: 1%; margin-bottom: 1%;">Insert</button>
+                <br>
+                <span>{{ notify }}</span>
+                <br>
+                <br>
+                <br>
+                <a type="submit" style="margin-top:2% ; background-color: #2e8b86;" href="{% url 'defaults' %}">Insert Defaults</a>
+            </center>
+        </form>
+        <form style="border: none;" method="POST" id="formlogout">
+            {% csrf_token %}
+            <br>
+            <br>
+            <button style="background-color: #8B0000; margin-left: 40%; margin-top: 3%;" name="logout" type="submit">Log out</button>
+        </form>
+        <center>
+            {% if div_color == True %}
+                <div style="background-color: #4F7942;" class="div_c">
+                    {{ tab_data | safe }}
+                </div>
+            {% else %}
+                <div style="background-color: #8B0000;" class="div_c">
+                    {{ tab_data | safe }}
+                </div>
+            {% endif %}
+        </center>
+    </body>
+</html>
