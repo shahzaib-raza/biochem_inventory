@@ -12,11 +12,7 @@ NAME = None
 
 def get_table_names():
     conn = sqlite3.connect("biochem.sqlite")
-    q = """
-        SELECT name FROM sqlite_schema
-        WHERE type='table'
-        ORDER BY name;
-    """
+    q = """SELECT name FROM sqlite_master WHERE type='table';"""
     cur = conn.cursor()
     r = cur.execute(q)
     cols = [i[0] for i in r.fetchall()]
